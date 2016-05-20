@@ -18,9 +18,12 @@ public class VaadinUI extends UI {
     @Autowired
     UserGroupView groupView;
 
+    @Autowired
+    PersonMap personMap;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        TabSheet tabSheet = new TabSheet(personsView, groupView);
+        TabSheet tabSheet = new TabSheet(personsView, groupView, personMap);
         tabSheet.addStyleName(ValoTheme.TABSHEET_CENTERED_TABS);
         tabSheet.setSizeFull();
         setContent(tabSheet);

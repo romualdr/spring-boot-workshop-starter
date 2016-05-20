@@ -1,10 +1,8 @@
 package com.example;
 
-import com.vaadin.event.FieldEvents;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import javax.annotation.PostConstruct;
 
@@ -35,7 +33,6 @@ public class PersonsView extends MHorizontalLayout {
         MHorizontalLayout header = new MHorizontalLayout();
         TextField searchByName = new TextField();
         searchByName.setInputPrompt("Search by name");
-        Button button = new Button("Add person");
 
         // List
         List<Person> findAll = repo.findAll();
@@ -50,15 +47,25 @@ public class PersonsView extends MHorizontalLayout {
             table.setBeans(persons);
         });
 
-
+        PersonForm form = new PersonForm();
 
         header.addComponent(searchByName);
-        header.addComponent(button);
 
         listContainer.addComponent(header);
         listContainer.addComponent(table);
 
+        table.addMValueChangeListener(e -> {
+            Person value = e.getValue();
+            form.setEntity(value);
+        });
+
+        form.setSavedHandler(person -> {
+            form.setEntity(repo.save(person));
+            table.setBeans(repo.findAll());
+        });
+
         this.addComponent(listContainer);
+        this.add(form);
 
     }
 
